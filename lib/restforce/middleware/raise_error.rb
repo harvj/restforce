@@ -15,11 +15,16 @@ module Restforce
     end
 
     def message
-      "#{body.first['errorCode']}: #{body.first['message']}"
+      "#{body['errorCode']}: #{body['message'] || body['errorMessage']}"
     end
 
     def body
-      JSON.parse(@env[:body])
+      json = JSON.parse(@env[:body])
+      if json.is_a?(Array)
+        json.first
+      else
+        json
+      end
     end
   end
 end
